@@ -1,21 +1,28 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from gi.repository import Gtk as gtk
+import os
 import subprocess
+from gi.repository import Gtk as gtk
 
 
 class SystrayApp(object):
+
     def __init__(self):
         self.tray = gtk.StatusIcon()
-        self.tray.set_from_file('/usr/share/pixmaps/updaten.png')
-        self.tray.connect('popup-menu', self.on_right_click)
+
+        if os.path.isfile('/usr/share/pixmaps/updaten.png'):
+            self.tray.set_from_file('/usr/share/pixmaps/updaten.png')
+        else:
+            self.tray.set_from_stock(gtk.STOCK_ABOUT)
+
         self.tray.set_tooltip_text('Lite Updater')
+        self.tray.connect('popup-menu', self.on_right_click)
 
     def on_right_click(self, icon, event_button, event_time):
-        self.make_menu(event_button, event_time)
+        self.make_menu(icon, event_button, event_time)
 
-    def make_menu(self, event_button, event_time):
+    def make_menu(self, icon, event_button, event_time):
         menu = gtk.Menu()
 
         about = gtk.MenuItem('About')
