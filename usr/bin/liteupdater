@@ -1,0 +1,2 @@
+#!/bin/bash
+python -OO /usr/lib/python3/dist-packages/liteupdater/liteupdater.py
