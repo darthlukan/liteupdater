@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Lite Updater
+GenericName=Lite Updater
+Encoding=UTF-8
+Exec=liteupdater
+Icon=liteupdater
+Type=Application
+Comment=Linux Lite Update Notifier for the system tray
+Categories=Settings;
+StartupNotify=true
+Terminal=false
