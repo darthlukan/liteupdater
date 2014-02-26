@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import gtk
+from gi.repository import Gtk as gtk
 import subprocess
 
 
@@ -10,13 +10,10 @@ class SystrayApp(object):
         self.tray = gtk.StatusIcon()
         self.tray.set_from_file('/usr/share/pixmaps/updaten.png')
         self.tray.connect('popup-menu', self.on_right_click)
-        self.tray.set_tooltip('Lite Updater')
+        self.tray.set_tooltip_text('Lite Updater')
 
     def on_right_click(self, icon, event_button, event_time):
         self.make_menu(event_button, event_time)
-        if self.tray.set_blinking():
-            self.tray.set_blinking(False)
-            self.tray.set_from_file('/usr/share/icons/updaten.png')
 
     def make_menu(self, event_button, event_time):
         menu = gtk.Menu()
@@ -40,8 +37,7 @@ class SystrayApp(object):
         menu.append(quit_action)
         quit_action.connect('activate', gtk.main_quit)
 
-        menu.popup(None, None, gtk.status_icon_position_menu,
-                   event_button, event_time, self.tray)
+        menu.popup(None, None, gtk.StatusIcon.position_menu, self.tray, event_button, event_time)
 
     def show_about_dialog(self, widget):
         about_dialog = gtk.AboutDialog()
