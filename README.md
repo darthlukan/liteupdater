@@ -16,3 +16,7 @@
 ## License
 
 > GPLv2, see LICENSE file.
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/darthlukan/liteupdater/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
