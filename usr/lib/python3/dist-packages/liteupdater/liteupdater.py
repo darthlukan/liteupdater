@@ -10,6 +10,7 @@ class SystrayApp(object):
 
     def __init__(self):
         self.tray = Gtk.StatusIcon()
+        self.menu = Gtk.Menu()
 
         if os.path.isfile('/usr/share/pixmaps/updaten.png'):
             self.tray.set_from_file('/usr/share/pixmaps/updaten.png')
@@ -24,7 +25,6 @@ class SystrayApp(object):
         self.make_menu(icon, event_button, event_time)
 
     def make_menu(self, icon, event_button, event_time):
-        self.menu = Gtk.Menu()
 
         about = Gtk.MenuItem()
         about.set_label("About")
