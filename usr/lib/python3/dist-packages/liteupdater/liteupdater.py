@@ -3,51 +3,50 @@
 
 import os
 import subprocess
-from gi.repository import Gtk as gtk
+from gi.repository import Gtk
 
 
 class SystrayApp(object):
 
     def __init__(self):
-        self.tray = gtk.StatusIcon()
+        self.tray = Gtk.StatusIcon()
 
         if os.path.isfile('/usr/share/pixmaps/updaten.png'):
             self.tray.set_from_file('/usr/share/pixmaps/updaten.png')
         else:
-            self.tray.set_from_stock(gtk.STOCK_ABOUT)
+            self.tray.set_from_stock(Gtk.STOCK_ABOUT)
 
         self.tray.set_tooltip_text('Lite Updater')
         self.tray.connect('popup-menu', self.on_right_click)
 
     def on_right_click(self, icon, event_button, event_time):
+        print("Right-click fired")
         self.make_menu(icon, event_button, event_time)
 
     def make_menu(self, icon, event_button, event_time):
-        menu = gtk.Menu()
+        self.menu = Gtk.Menu()
 
-        about = gtk.MenuItem('About')
-        about.show()
-        menu.append(about)
+        about = Gtk.MenuItem()
+        about.set_label("About")
         about.connect('activate', self.show_about_dialog)
 
-        run = gtk.MenuItem('Check Updates')
-        run.show()
-        menu.append(run)
+        quit_action = Gtk.MenuItem()
+        quit_action.set_label("Quit")
+        quit_action.connect("activate", Gtk.main_quit)
 
-        chklog = gtk.MenuItem('View Log')
-        chklog.show()
-        menu.append(chklog)
-        chklog.connect('activate', self.show_log)
+        self.menu.append(about)
+        self.menu.append(quit_action)
 
-        quit_action = gtk.MenuItem('Quit')
-        quit_action.show()
-        menu.append(quit_action)
-        quit_action.connect('activate', gtk.main_quit)
+        self.menu.show_all()
 
-        menu.popup(None, None, gtk.StatusIcon.position_menu, self.tray, event_button, event_time)
+        def pos(menu, icon):
+            return Gtk.StatusIcon.position_menu(menu, icon)
+
+        self.menu.popup(None, None, pos, icon, event_button, event_time)
+        print("Menu should have popped up")
 
     def show_about_dialog(self, widget):
-        about_dialog = gtk.AboutDialog()
+        about_dialog = Gtk.AboutDialog()
         about_dialog.set_destroy_with_parent(True)
         about_dialog.set_icon_name('Lite Updater')
         about_dialog.set_name('Lite Updater')
@@ -63,4 +62,4 @@ class SystrayApp(object):
 
 if __name__ == '__main__':
     SystrayApp()
-    gtk.main()
+    Gtk.main()
