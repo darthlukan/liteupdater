@@ -6,6 +6,12 @@ import subprocess
 import logging
 import notify2
 
+logging.basicConfig(filename="/tmp/lite-updater.log", level=logging.DEBUG)
+
+
+def log(message):
+    logging.debug("%s: %s" % (time.ctime(), message))
+
 
 def send_notification(title, body):
     """
@@ -37,6 +43,7 @@ def sync_caches():
     else:
         body = "There was an error syncing the repositories!"
         send_notification(title, body)
+        log(body)
         return False
 
     send_notification(title, body)
@@ -56,6 +63,7 @@ def check_updateables(*args):
     title = "Checking for available updates..."
     body = "searching..."
     send_notification(title, body)
+    log(title)
     pkgs = []
 
     chk_output = subprocess.Popen("apt-show-versions -u", shell=True, stdout=subprocess.PIPE)
@@ -70,10 +78,12 @@ def check_updateables(*args):
         title = "Updates available!"
         body = "You have %s updates available for installation." % num_updatables
         send_notification(title, body)
+        log(body)
     else:
         title = "No updates available."
         body = "Your system is up-to-date!"
         send_notification(title, body)
+        log(title)
 
     return num_updatables, pkgs
 
