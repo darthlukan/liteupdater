@@ -3,15 +3,18 @@
 
 import os
 import subprocess
+from apt import liteapt
 from gi.repository import Gtk
 
 
 class SystrayApp(object):
 
     def __init__(self):
+        self.apt = liteapt
         self.tray = Gtk.StatusIcon()
         self.menu = Gtk.Menu()
         self.menu_about = Gtk.MenuItem()
+        self.menu_check_updates = Gtk.MenuItem()
         self.menu_quit = Gtk.MenuItem()
         self.about_dialog = ''
 
@@ -37,10 +40,14 @@ class SystrayApp(object):
         self.menu_about.set_label("About")
         self.menu_about.connect('activate', self.show_about_dialog)
 
+        self.menu_check_updates.set_label("Check updates")
+        self.menu_about.connect('activate', self.apt.check_updateables)
+
         self.menu_quit.set_label("Quit")
         self.menu_quit.connect("activate", Gtk.main_quit)
 
         self.menu.append(self.menu_about)
+        self.menu.append(self.menu_check_updates)
         self.menu.append(self.menu_quit)
 
         self.menu.show_all()
@@ -56,10 +63,16 @@ class SystrayApp(object):
         self.about_dialog.set_icon_name('Lite Updater')
         self.about_dialog.set_name('Lite Updater')
         self.about_dialog.set_version('0.1')
-        self.about_dialog.set_comments(u'Check for Linux Lite updates')
-        self.about_dialog.set_authors([u'Brian Tomlinson <brian.tomlinson@linux.com>'])
+        self.about_dialog.set_comments('Check for Linux Lite updates')
+        self.about_dialog.set_authors(['Brian Tomlinson <brian.tomlinson@linux.com>'])
         self.about_dialog.run()
         self.about_dialog.destroy()
+
+    def check_updates(self, widget):
+        num_avail, pkgs = self.apt.check_updateables()
+        title = "You have %s updates available!" % num_avail
+        message = "%s" % pkgs
+        return self.apt.send_notification(title, message)
 
     def show_log(self, widget):
         subprocess.Popen('/usr/bin/leafpad /tmp/liteupdater.log', shell=True)

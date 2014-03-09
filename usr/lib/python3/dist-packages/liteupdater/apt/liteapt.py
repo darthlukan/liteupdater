@@ -45,7 +45,7 @@ def sync_caches():
     return True
 
 
-def check_updateables():
+def check_updateables(*args):
     """
     Calls sync_caches and then checks the number of available updates
     based on the packages listed in stdout after 'apt-show-versions -u'.
