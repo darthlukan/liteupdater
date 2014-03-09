@@ -14,6 +14,7 @@ class SystrayApp(object):
         self.menu = Gtk.Menu()
         self.menu_about = Gtk.MenuItem()
         self.menu_check_updates = Gtk.MenuItem()
+        self.menu_log = Gtk.MenuItem()
         self.menu_quit = Gtk.MenuItem()
         self.about_dialog = ''
 
@@ -36,17 +37,21 @@ class SystrayApp(object):
         except Exception as e:
             print(e)
 
-        self.menu_about.set_label("About")
+        self.menu_about.set_label('About')
         self.menu_about.connect('activate', self.show_about_dialog)
 
-        self.menu_check_updates.set_label("Check updates")
+        self.menu_check_updates.set_label('Check updates')
         self.menu_about.connect('activate', self.apt.check_updateables)
 
-        self.menu_quit.set_label("Quit")
-        self.menu_quit.connect("activate", Gtk.main_quit)
+        self.menu_log('View Log')
+        self.menu_log.connect('activate', self.show_log)
+
+        self.menu_quit.set_label('Quit')
+        self.menu_quit.connect('activate', Gtk.main_quit)
 
         self.menu.append(self.menu_about)
         self.menu.append(self.menu_check_updates)
+        self.menu.append(self.menu_log)
         self.menu.append(self.menu_quit)
 
         self.menu.show_all()
